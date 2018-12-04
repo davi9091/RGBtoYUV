@@ -16,8 +16,10 @@ unsigned char* readBMP(char* filename) {
 
     FILE* file = fopen(filename, "rb");
 
-    if (file == std::nullptr_t)
+    if (file == nullptr) {
         throw "File is NULL";
+    }
+
     // Make sure we open something
 
     unsigned char info[54];
@@ -32,8 +34,9 @@ unsigned char* readBMP(char* filename) {
     auto* data = new unsigned char[row_padded];
 
     for(int i = 0; i < height; ++i) {
-        fread(int j = 0; j < width*3; j += 3) {
-            swap(data[j], data[j+2]);
+        fread(data, sizeof(unsigned char), row_padded, file);
+        for(int j = 0; j < width*3; j += 3) {
+            std::swap(data[j], data[j+2]);
             // Convert weird (B, G, R) format to (R, G, B)
         }
     }
