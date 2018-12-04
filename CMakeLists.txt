@@ -3,4 +3,4 @@ project(RGBtoYUV)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(RGBtoYUV main.cpp)
+add_executable(RGBtoYUV main.cpp bmp.h bmp.cpp)

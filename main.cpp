@@ -12,7 +12,10 @@
 
 #include <iostream>
 #include "stdio.h"
+#include "bmp.h"
 
+
+// This is deprecated, leaving it here just in case
 unsigned char* readBMP(char const* filepath) {
 
     FILE* file = fopen(filepath, "rb");
@@ -42,10 +45,6 @@ unsigned char* readBMP(char const* filepath) {
             std::swap(data[j], data[j+2]);
             // Convert weird (B, G, R) format to (R, G, B)
 
-            std::cout << "Red: " << int(data[j]) << std::endl;
-            std::cout << "Green: " << int(data[j+1]) << std::endl;
-            std::cout << "Blue: " << int(data[j+2]) << std::endl;
-            std::cout << " " << std::endl;
         }
     }
 
@@ -58,10 +57,15 @@ unsigned char* readBMP(char const* filepath) {
 
 int main() {
     char const* filepath = "/Users/davi9091/LAND.BMP";
+    // This image is 1024x768
     unsigned char* bmpdata;
-    bmpdata = readBMP(filepath);
 
-    std::cout << bmpdata << '\n';
+    imageBMP bmp(filepath);
+
+    bmpdata = bmp.getData();
+    int bmpwidth = bmp.getWidth();
+
+    std::cout << bmpwidth << '\n';
 
     return 0;
 }
