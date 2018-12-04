@@ -11,10 +11,11 @@
  */
 
 #include <iostream>
+#include "stdio.h"
 
-unsigned char* readBMP(char* filename) {
+unsigned char* readBMP(char const* filepath) {
 
-    FILE* file = fopen(filename, "rb");
+    FILE* file = fopen(filepath, "rb");
 
     if (file == nullptr) {
         throw "File is NULL";
@@ -31,6 +32,8 @@ unsigned char* readBMP(char* filename) {
     // Take width and height of the image
 
     int row_padded = (width*3 + 3) & (~3);
+    // This is the size of bmp image without padding
+
     auto* data = new unsigned char[row_padded];
 
     for(int i = 0; i < height; ++i) {
@@ -38,6 +41,11 @@ unsigned char* readBMP(char* filename) {
         for(int j = 0; j < width*3; j += 3) {
             std::swap(data[j], data[j+2]);
             // Convert weird (B, G, R) format to (R, G, B)
+
+            std::cout << "Red: " << int(data[j]) << std::endl;
+            std::cout << "Green: " << int(data[j+1]) << std::endl;
+            std::cout << "Blue: " << int(data[j+2]) << std::endl;
+            std::cout << " " << std::endl;
         }
     }
 
@@ -49,6 +57,11 @@ unsigned char* readBMP(char* filename) {
 
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    char const* filepath = "/Users/davi9091/LAND.BMP";
+    unsigned char* bmpdata;
+    bmpdata = readBMP(filepath);
+
+    std::cout << bmpdata << '\n';
+
     return 0;
 }
