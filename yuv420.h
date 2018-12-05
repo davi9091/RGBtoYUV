@@ -20,10 +20,12 @@ private:
 
     unsigned char* yuv_data;
 
+    // TODO: create separate arrays for Y, U and V values
+
 
 public:
 
-    YUVI420(char const* path);
+    YUVI420(char const* path, int width, int height, int frames);
     ~YUVI420();
 
     int getWidth();

@@ -28,12 +28,20 @@ imageBMP::imageBMP(char const* path) {
 
     auto* bm_data = new unsigned char[bm_row_padded];
 
+    auto* bm_R_data = new unsigned char[bm_row_padded / 3];
+    auto* bm_G_data = new unsigned char[bm_row_padded / 3];
+    auto* bm_B_data = new unsigned char[bm_row_padded / 3];
+
     for (int i = 0; i < bm_height; i++) {
         fread(bm_data, sizeof(unsigned char), bm_row_padded, file);
         for(int j = 0; j < bm_width*3; j += 3) {
-            std::swap(bm_data[j], bm_data[j+2]);
+            bm_B_data[j] = bm_data[j];
+            bm_G_data[j+1] = bm_data[j+1];
+            bm_R_data[j+2] = bm_data[j+2];
         }
     }
+
+
 
     fclose(file);
 }
@@ -42,6 +50,18 @@ imageBMP::~imageBMP() = default;
 
 unsigned char* imageBMP::getData() {
     return bm_data;
+}
+
+unsigned char* imageBMP::getRData() {
+    return bm_R_data;
+}
+
+unsigned char* imageBMP::getGData() {
+    return bm_G_data;
+}
+
+unsigned char* imageBMP::getBData() {
+    return bm_B_data;
 }
 
 int imageBMP::getWidth() {
