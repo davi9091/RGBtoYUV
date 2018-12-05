@@ -51,3 +51,4 @@ int imageBMP::getWidth() {
 int imageBMP::getHeight() {
     return bm_height;
 }
+

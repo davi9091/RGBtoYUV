@@ -12,6 +12,7 @@ class imageBMP {
 private:
 
     // We store chars instead of int because they weigh less
+    // Assuming BMP is 24-bit colour
 
     unsigned char bm_header[54]; // 14-byte BITMAPFILEHEADER and 40-byte BITMAPINFO
 
@@ -23,7 +24,7 @@ private:
     // The size, including row-padding fix
 
     unsigned char* bm_data;
-    // Data inside of , stored as recurring R, G and B values (from 0 to 255)
+    // Data inside of bmp, stored as recurring B, G and R values (from 0 to 255)
 
 public:
 

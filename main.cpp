@@ -11,7 +11,6 @@
  */
 
 #include <iostream>
-#include "stdio.h"
 #include "bmp.h"
 
 
@@ -60,12 +59,16 @@ int main() {
     // This image is 1024x768
     unsigned char* bmpdata;
 
+    int yuv_width = 352;
+    int yuv_heigth = 288;
+    int yuv_frames = 150;
+
     imageBMP bmp(filepath);
 
     bmpdata = bmp.getData();
     int bmpwidth = bmp.getWidth();
 
-    std::cout << bmpwidth << '\n';
+    std::cout << bmpdata << '\n';
 
     return 0;
 }
