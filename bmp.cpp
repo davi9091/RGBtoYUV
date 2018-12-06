@@ -41,7 +41,7 @@ imageBMP::imageBMP(char const* path) {
         }
     }
 
-
+    // reading data for different properties could be threaded
 
     fclose(file);
 }

@@ -10,7 +10,11 @@ private:
     int yuv_width;
     int yuv_height;
 
-    int yuv_frame_size;
+//    int yuv_frame_size;
+
+    int yuv_Y_frame_size;
+    int yuv_U_frame_size;
+    int yuv_V_frame_size;
 
     int yuv_frames;
 
@@ -18,9 +22,9 @@ private:
     // apparently YUVI420 (same as YV12) doesn't store any data
     // for width, height or size of image inside.
 
-    unsigned char* yuv_data;
-
-    // TODO: create separate arrays for Y, U and V values
+    unsigned char* yuv_Y_data;
+    unsigned char* yuv_U_data;
+    unsigned char* yuv_V_data;
 
 
 public:
@@ -31,7 +35,9 @@ public:
     int getWidth();
     int getHeigth();
 
-    unsigned char* getData();
+    unsigned char* getYData();
+    unsigned char* getUData();
+    unsigned char* getVData();
 
 
 
