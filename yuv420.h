@@ -39,7 +39,7 @@ public:
     unsigned char* getUData();
     unsigned char* getVData();
 
-    void convertRGB(unsigned char* R_data, unsigned char* G_data, unsigned char* B_data, int rgb_width, int rgb_height);
+    void addRGB(unsigned char* R_data, unsigned char* G_data, unsigned char* B_data, int rgb_width, int rgb_height);
     void writeToFile(char const *path);
 
 

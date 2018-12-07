@@ -68,7 +68,7 @@ int main() {
     imageBMP bmp(bmppath);
     YUVI420 yuv(yuvpath, yuv_width, yuv_heigth, yuv_frames);
 
-//    yuv.convertRGB(bmp.getRData(), bmp.getGData(), bmp.getBData(), bmp.getWidth(), bmp.getHeight());
+    yuv.addRGB(bmp.getRData(), bmp.getGData(), bmp.getBData(), bmp.getWidth(), bmp.getHeight());
 
     yuv.writeToFile("/Users/davi9091/fuckup.YUV");
 

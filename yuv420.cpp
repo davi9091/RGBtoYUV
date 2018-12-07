@@ -29,21 +29,20 @@ YUVI420::YUVI420(char const *path, int width, int height, int frames) {
     yuv_frames = frames;
 
     yuv_Y_data = new unsigned char[yuv_Y_frame_size * yuv_frames];
+    auto* temp_Y_data = new unsigned char[yuv_Y_frame_size];
     yuv_U_data = new unsigned char[yuv_U_frame_size * yuv_frames];
+    auto* temp_U_data = new unsigned char[yuv_U_frame_size];
     yuv_V_data = new unsigned char[yuv_V_frame_size * yuv_frames];
+    auto* temp_V_data = new unsigned char[yuv_V_frame_size];
 
     for (int i = 0; i < yuv_frames; ++i) {
-        fread((*this).yuv_Y_data, sizeof(unsigned char), yuv_Y_frame_size, file);
+        fread(temp_Y_data, sizeof(unsigned char), yuv_Y_frame_size, file);
+        memcpy(yuv_Y_data+(i*yuv_Y_frame_size), temp_Y_data, yuv_Y_frame_size);
+        fread(temp_U_data, sizeof(unsigned char), yuv_U_frame_size, file);
+        memcpy(yuv_U_data+(i*yuv_U_frame_size), temp_U_data, yuv_U_frame_size);
+        fread(temp_V_data, sizeof(unsigned char), yuv_V_frame_size, file);
+        memcpy(yuv_V_data+(i*yuv_V_frame_size), temp_V_data, yuv_V_frame_size);
     }
-
-    for (int i = 0; i < yuv_frames; ++i) {
-        fread(yuv_U_data, sizeof(unsigned char), yuv_U_frame_size, file);
-    }
-
-    for (int i = 0; i < yuv_frames; ++i) {
-        fread(yuv_V_data, sizeof(unsigned char), yuv_V_frame_size, file);
-    }
-
 
     // reading each property data could be threaded.
 
@@ -64,7 +63,7 @@ unsigned char *YUVI420::getVData() {
     return yuv_V_data;
 }
 
-void YUVI420::convertRGB(unsigned char *R_data, unsigned char *G_data, unsigned char *B_data, int rgb_width, int rgb_height) {
+void YUVI420::addRGB(unsigned char *R_data, unsigned char *G_data, unsigned char *B_data, int rgb_width, int rgb_height) {
 
     const double Kr = 0.2126;
     const double Kb = 0.0722;
