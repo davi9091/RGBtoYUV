@@ -26,11 +26,11 @@ imageBMP::imageBMP(char const* path) {
 
     bm_row_padded = (bm_width*3 + 3) & (~3);
 
-    auto* bm_data = new unsigned char[bm_row_padded];
+    bm_data = new unsigned char[bm_row_padded];
 
-    auto* bm_R_data = new unsigned char[bm_row_padded / 3];
-    auto* bm_G_data = new unsigned char[bm_row_padded / 3];
-    auto* bm_B_data = new unsigned char[bm_row_padded / 3];
+    bm_R_data = new unsigned char[bm_row_padded / 3];
+    bm_G_data = new unsigned char[bm_row_padded / 3];
+    bm_B_data = new unsigned char[bm_row_padded / 3];
 
     for (int i = 0; i < bm_height; i++) {
         fread(bm_data, sizeof(unsigned char), bm_row_padded, file);

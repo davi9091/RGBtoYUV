@@ -56,8 +56,8 @@ unsigned char* readBMP(char const* filepath) {
 
 
 int main() {
-//    char const* bmppath = "/Users/davi9091/LAND.BMP";
-    // This image is 1024x768
+    char const* bmppath = "/Users/davi9091/TRU256.BMP";
+    // This image is 256x64px
 
     char const* yuvpath = "/Users/davi9091/BUS.YUV";
 
@@ -65,15 +65,12 @@ int main() {
     int yuv_heigth = 288;
     int yuv_frames = 150;
 
-//    imageBMP bmp(bmppath);
+    imageBMP bmp(bmppath);
     YUVI420 yuv(yuvpath, yuv_width, yuv_heigth, yuv_frames);
 
-//    int bmpwidth = bmp.getWidth();
+//    yuv.convertRGB(bmp.getRData(), bmp.getGData(), bmp.getBData(), bmp.getWidth(), bmp.getHeight());
 
-    unsigned char* sample_data;
-    sample_data = yuv.getYData();
-
-    std::cout << sample_data << std::endl;
+    yuv.writeToFile("/Users/davi9091/fuckup.YUV");
 
     return 0;
 }
