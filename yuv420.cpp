@@ -11,7 +11,7 @@ YUVI420::YUVI420(char const *path, int width, int height, int frames) {
     FILE *file = fopen(path, "r+b");
 
     if (file == nullptr) {
-        throw "YUV file is not NULL";
+        throw "YUV file is NULL";
     }
 
     yuv_width = width;
@@ -65,8 +65,6 @@ unsigned char *YUVI420::getVData() {
 
 void YUVI420::addRGB(unsigned char *R_data, unsigned char *G_data, unsigned char *B_data, int rgb_width, int rgb_height) {
 
-    const double Kr = 0.2126;
-    const double Kb = 0.0722;
     int temp;
     int offset = 0;
 
@@ -81,14 +79,42 @@ void YUVI420::addRGB(unsigned char *R_data, unsigned char *G_data, unsigned char
                 yuv_pos = j*yuv_frames + rgb_pos + offset;
 //                yuv_pos++;
 
-                temp = (int) std::lround(Kr * (int)R_data[rgb_pos] + (1 - Kr - Kb) * (int)G_data[rgb_pos] + Kb * (int)B_data[rgb_pos]);
+                temp = (int) std::lround(0.299 * (int)R_data[rgb_pos] + 0.587 * (int)G_data[rgb_pos] + 0.114 * (int)B_data[rgb_pos]);
                 yuv_Y_data[yuv_pos] = (unsigned char) temp;
-
-                //this should work
             }
+
             offset = offset + (yuv_width - rgb_width);
         }
-        offset = offset + ((yuv_height - rgb_height) * yuv_width) + yuv_U_frame_size + yuv_V_frame_size;
+
+        offset = offset + ((yuv_height - rgb_height) * yuv_width);
+    }
+
+    offset = 0;
+
+    for (int i = 0; i < yuv_frames; ++i) {
+        int yuv_pos = 0;
+        int rgb_pos = 0;
+
+        for (int j = 0; j < rgb_height; j += 2) {
+            for (int k = 0; k < rgb_width; k += 2) {
+                rgb_pos = rgb_pos + 2;
+                yuv_pos = j*yuv_frames + rgb_pos + offset;
+
+                int tempR = (int)std::lround(((int)R_data[rgb_pos] + (int)R_data[rgb_pos+1] + (int)R_data[rgb_pos + rgb_width] + (int)R_data[rgb_pos + rgb_width + 1]) / 4);
+                int tempG = (int)std::lround(((int)G_data[rgb_pos] + (int)G_data[rgb_pos+1] + (int)G_data[rgb_pos + rgb_width] + (int)G_data[rgb_pos + rgb_width + 1]) / 4);
+                int tempB = (int)std::lround(((int)B_data[rgb_pos] + (int)B_data[rgb_pos+1] + (int)B_data[rgb_pos + rgb_width] + (int)B_data[rgb_pos + rgb_width + 1]) / 4);
+
+                temp = (int) std::lround(-0.147 * tempR - 0.289 * tempG + 0.436 * tempB);
+                yuv_U_data[yuv_pos] = (unsigned char) temp;
+                temp = (int) std::lround(0.615 * tempR - 0.515 * tempG - 0.100 * tempB);
+                yuv_V_data[yuv_pos + yuv_U_frame_size] = (unsigned char) temp;
+            }
+
+            rgb_pos = rgb_pos + rgb_width;
+            offset = offset + (yuv_width - rgb_width)/2;
+        }
+
+        offset = offset + ((yuv_height - rgb_height) * yuv_width)/4;
     }
 }
 

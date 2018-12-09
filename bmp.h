@@ -23,9 +23,6 @@ private:
     int bm_row_padded;
     // The size, including row-padding fix
 
-    unsigned char* bm_data;
-    // Raw data inside of bmp, stored as recurring B, G and R values (from 0 to 255)
-
     unsigned char* bm_R_data;
     unsigned char* bm_G_data;
     unsigned char* bm_B_data;
@@ -38,7 +35,6 @@ public:
     int getWidth();
     int getHeight();
 
-    unsigned char* getData();
     unsigned char* getRData();
     unsigned char* getGData();
     unsigned char* getBData();

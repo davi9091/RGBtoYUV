@@ -9,8 +9,8 @@ imageBMP::imageBMP(char const* path) {
 
     FILE* file = fopen(path, "rb");
 
-    if (file != nullptr) {
-        std::cout << "file is not null!" << std::endl;
+    if (file == nullptr) {
+        throw "BMP file is NULL";
     }
 
     fread(bm_header, sizeof(unsigned char), 54, file);
@@ -18,39 +18,37 @@ imageBMP::imageBMP(char const* path) {
     bm_width = *(int*)&bm_header[18];
     bm_height = *(int*)&bm_header[22];
 
+    // 54 first bytes is the header, which is 14-byte BITMAPFILEHEADER
+    // and 40-byte BITMAPINFO.
+    // I read it as one piece for convenience.
     // BITMAPINFO contains:
     // 0E 00 biSize - 4 bytes of DWORD, useless for us, since we have to consider padding
     // 12 04 biWidth - 4 bytes
     // 16 08 biHeight - 4 bytes
-    // Pretty much all we have to know
+    // Pretty much all we have to know.
 
     bm_row_padded = (bm_width*3 + 3) & (~3);
 
-    bm_data = new unsigned char[bm_row_padded];
+    auto* bm_data = new unsigned char[bm_row_padded];
 
-    bm_R_data = new unsigned char[bm_row_padded / 3];
-    bm_G_data = new unsigned char[bm_row_padded / 3];
-    bm_B_data = new unsigned char[bm_row_padded / 3];
+    bm_R_data = new unsigned char[bm_height * bm_width];
+    bm_G_data = new unsigned char[bm_height * bm_width];
+    bm_B_data = new unsigned char[bm_height * bm_width];
 
-    for (int i = 0; i < bm_height; i++) {
-        fread(bm_data, sizeof(unsigned char), bm_row_padded, file);
-        for(int j = 0; j < bm_width*3; j += 3) {
-            bm_B_data[j] = bm_data[j];
-            bm_G_data[j+1] = bm_data[j+1];
-            bm_R_data[j+2] = bm_data[j+2];
+    for (int i = 0; i < bm_height; ++i) {
+        fread(bm_data, sizeof(char), bm_row_padded, file);
+
+        for(int j = 0; j < bm_row_padded; j += 3) {
+            bm_B_data[i*bm_height + j] = bm_data[j];
+            bm_G_data[i*bm_height + j+1] = bm_data[j+1];
+            bm_R_data[i*bm_height + j+2] = bm_data[j+2];
         }
     }
-
-    // reading data for different properties could be threaded
 
     fclose(file);
 }
 
 imageBMP::~imageBMP() = default;
-
-unsigned char* imageBMP::getData() {
-    return bm_data;
-}
 
 unsigned char* imageBMP::getRData() {
     return bm_R_data;
