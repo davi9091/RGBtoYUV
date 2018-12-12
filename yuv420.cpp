@@ -40,29 +40,34 @@ YUVI420::YUVI420(char const *path, int width, int height, int frames) {
         fread(temp_Y_data, sizeof(unsigned char), yuv_Y_frame_size, file);
 
         for (int j = 0; j < yuv_Y_frame_size; ++j) {
-            yuv_Y_data.push_back(temp_Y_data[i*yuv_Y_frame_size + j]);
+            yuv_Y_data.push_back(temp_Y_data[j]);
         }
 
         fread(temp_U_data, sizeof(unsigned char), yuv_U_frame_size, file);
         for (int j = 0; j < yuv_U_frame_size; ++j) {
-            yuv_U_data.push_back(temp_U_data[i*yuv_U_frame_size + j]);
+            yuv_U_data.push_back(temp_U_data[j]);
         }
 
         fread(temp_V_data, sizeof(unsigned char), yuv_V_frame_size, file);
         for (int j = 0; j < yuv_V_frame_size; ++j) {
-            yuv_V_data.push_back(temp_V_data[i*yuv_V_frame_size + j]);
+            yuv_V_data.push_back(temp_V_data[j]);
         }
     }
 
-    std::cout << yuv_U_data.size() << std::endl;
-    std::cout << yuv_V_data.size() << std::endl;
+    delete [] temp_Y_data;
+    delete [] temp_U_data;
+    delete [] temp_V_data;
 
     // reading each property data could be threaded.
 
     fclose(file);
 }
 
-YUVI420::~YUVI420() = default;
+YUVI420::~YUVI420() {
+    yuv_Y_data.clear();
+    yuv_U_data.clear();
+    yuv_V_data.clear();
+}
 
 std::vector <unsigned char> YUVI420::getYData() {
     return yuv_Y_data;
@@ -97,7 +102,7 @@ void YUVI420::addRGB(std::vector <unsigned char> R_data, std::vector <unsigned c
             offset = offset + (yuv_width - rgb_width);
         }
 
-        offset = offset + ((yuv_height - rgb_height) * yuv_width)*2;
+        offset = i * yuv_Y_frame_size;
         rgb_pos = 0;
     }
 
@@ -111,7 +116,7 @@ void YUVI420::addRGB(std::vector <unsigned char> R_data, std::vector <unsigned c
         for (int j = 0; j < rgb_height; j += 2) {
             for (int k = 0; k < rgb_width; k += 2) {
                 rgb_pos = rgb_pos + 2;
-                yuv_pos = rgb_pos + offset;
+                yuv_pos = rgb_pos/2 + offset - 1;
 
                 int tempR = (int)std::lround(((int)R_data[rgb_pos] + (int)R_data[rgb_pos+1] + (int)R_data[rgb_pos + rgb_width] + (int)R_data[rgb_pos + rgb_width + 1]) / 4);
                 int tempG = (int)std::lround(((int)G_data[rgb_pos] + (int)G_data[rgb_pos+1] + (int)G_data[rgb_pos + rgb_width] + (int)G_data[rgb_pos + rgb_width + 1]) / 4);
@@ -119,16 +124,17 @@ void YUVI420::addRGB(std::vector <unsigned char> R_data, std::vector <unsigned c
 
                 temp = (int) std::lround(-0.147 * tempR - 0.289 * tempG + 0.436 * tempB);
                 yuv_U_data[yuv_pos] = (unsigned char) temp;
+
                 temp = (int) std::lround(0.615 * tempR - 0.515 * tempG - 0.100 * tempB);
                 yuv_V_data[yuv_pos] = (unsigned char) temp;
             }
 
             rgb_pos = rgb_pos + rgb_width;
-            offset = offset + (yuv_width - rgb_width)/2;
+            offset = offset + (yuv_width - rgb_width);
         }
 
         rgb_pos = 0;
-        offset = offset + ((yuv_height - rgb_height)/2 * yuv_width/2)*2;
+        offset = i * yuv_U_frame_size;
     }
 }
 
