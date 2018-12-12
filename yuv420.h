@@ -5,6 +5,9 @@
 #ifndef RGBTOYUV_YUV420_H
 #define RGBTOYUV_YUV420_H
 
+#include <iostream>
+#include <vector>
+
 class YUVI420 {
 private:
     int yuv_width;
@@ -22,9 +25,9 @@ private:
     // apparently YUVI420 (same as YV12) doesn't store any data
     // for width, height or size of image inside.
 
-    unsigned char* yuv_Y_data;
-    unsigned char* yuv_U_data;
-    unsigned char* yuv_V_data;
+    std::vector<unsigned char> yuv_Y_data;
+    std::vector<unsigned char> yuv_U_data;
+    std::vector<unsigned char> yuv_V_data;
 
 
 public:
@@ -35,11 +38,11 @@ public:
     int getWidth();
     int getHeigth();
 
-    unsigned char* getYData();
-    unsigned char* getUData();
-    unsigned char* getVData();
+    std::vector <unsigned char> getYData();
+    std::vector <unsigned char> getUData();
+    std::vector <unsigned char> getVData();
 
-    void addRGB(unsigned char* R_data, unsigned char* G_data, unsigned char* B_data, int rgb_width, int rgb_height);
+    void addRGB(std::vector <unsigned char> R_data, std::vector <unsigned char> G_data, std::vector <unsigned char> B_data, int rgb_width, int rgb_height);
     void writeToFile(char const *path);
 
 
