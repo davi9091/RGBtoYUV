@@ -56,17 +56,16 @@ unsigned char* readBMP(char const* filepath) {
 
 
 int main() {
-    char const* bmppath = "/Users/davi9091/TRU256.BMP";
-    // This image is 256x64px
+    char const* bmppath = "/Users/davi9091/VENUS.BMP";
 
     char const* yuvpath = "/Users/davi9091/BUS.YUV";
 
     int yuv_width = 352;
-    int yuv_heigth = 288;
+    int yuv_height = 288;
     int yuv_frames = 150;
 
     imageBMP bmp(bmppath);
-    YUVI420 yuv(yuvpath, yuv_width, yuv_heigth, yuv_frames);
+    YUVI420 yuv(yuvpath, yuv_width, yuv_height, yuv_frames);
 
     yuv.addRGB(bmp.getRData(), bmp.getGData(), bmp.getBData(), bmp.getWidth(), bmp.getHeight());
 
