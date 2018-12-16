@@ -7,6 +7,8 @@
 
 #include <sys/proc_info.h>
 #include <cstdio>
+#include <iostream>
+#include <vector>
 
 class imageBMP {
 private:
@@ -23,9 +25,9 @@ private:
     int bm_row_padded;
     // The size, including row-padding fix
 
-    unsigned char* bm_R_data;
-    unsigned char* bm_G_data;
-    unsigned char* bm_B_data;
+    std::vector <unsigned char> bm_R_data;
+    std::vector <unsigned char> bm_G_data;
+    std::vector <unsigned char> bm_B_data;
 
 public:
 
@@ -35,9 +37,9 @@ public:
     int getWidth();
     int getHeight();
 
-    unsigned char* getRData();
-    unsigned char* getGData();
-    unsigned char* getBData();
+    std::vector <unsigned char> getRData();
+    std::vector <unsigned char> getGData();
+    std::vector <unsigned char> getBData();
 
 };
 

@@ -31,17 +31,13 @@ imageBMP::imageBMP(char const* path) {
 
     auto* bm_data = new unsigned char[bm_row_padded];
 
-    bm_R_data = new unsigned char[bm_height * bm_width];
-    bm_G_data = new unsigned char[bm_height * bm_width];
-    bm_B_data = new unsigned char[bm_height * bm_width];
-
     for (int i = 0; i < bm_height; ++i) {
         fread(bm_data, sizeof(char), bm_row_padded, file);
 
         for(int j = 0; j < bm_row_padded; j += 3) {
-            bm_B_data[i*bm_height + j] = bm_data[j];
-            bm_G_data[i*bm_height + j+1] = bm_data[j+1];
-            bm_R_data[i*bm_height + j+2] = bm_data[j+2];
+            bm_B_data.push_back(bm_data[j]);
+            bm_G_data.push_back(bm_data[j+1]);
+            bm_R_data.push_back(bm_data[j+2]);
         }
     }
 
@@ -50,15 +46,15 @@ imageBMP::imageBMP(char const* path) {
 
 imageBMP::~imageBMP() = default;
 
-unsigned char* imageBMP::getRData() {
+std::vector <unsigned char> imageBMP::getRData() {
     return bm_R_data;
 }
 
-unsigned char* imageBMP::getGData() {
+std::vector <unsigned char> imageBMP::getGData() {
     return bm_G_data;
 }
 
-unsigned char* imageBMP::getBData() {
+std::vector <unsigned char> imageBMP::getBData() {
     return bm_B_data;
 }
 
