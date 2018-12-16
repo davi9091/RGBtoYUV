@@ -35,9 +35,9 @@ imageBMP::imageBMP(char const* path) {
         fread(bm_data, sizeof(char), bm_row_padded, file);
 
         for(int j = 0; j < bm_row_padded; j += 3) {
-            bm_B_data.push_back(bm_data[j]);
-            bm_G_data.push_back(bm_data[j+1]);
             bm_R_data.push_back(bm_data[j+2]);
+            bm_G_data.push_back(bm_data[j+1]);
+            bm_B_data.push_back(bm_data[j]);
         }
     }
 

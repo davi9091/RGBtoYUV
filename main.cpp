@@ -56,7 +56,7 @@ unsigned char* readBMP(char const* filepath) {
 
 
 int main() {
-    char const* bmppath = "/Users/davi9091/VENUS.BMP";
+    char const* bmppath = "/Users/davi9091/TRU256.BMP";
 
     char const* yuvpath = "/Users/davi9091/BUS.YUV";
 
