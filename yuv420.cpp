@@ -89,6 +89,8 @@ void YUVI420::addRGB(std::vector <unsigned char> R_data, std::vector <unsigned c
     int yuv_pos = 0;
     int rgb_pos = 0;
 
+    // Y value
+
     for (int i = 0; i < yuv_frames; ++i) {
         for (int j = 0; j < rgb_height; ++j) {
             for (int k = 0; k < rgb_width; ++k) {
@@ -107,16 +109,17 @@ void YUVI420::addRGB(std::vector <unsigned char> R_data, std::vector <unsigned c
     }
 
     offset = 0;
-
-    yuv_pos = 0;
     rgb_pos = 0;
+    yuv_pos = 0;
+
+    // U and V values
 
     for (int i = 0; i < yuv_frames; ++i) {
 
         for (int j = 0; j < rgb_height; j += 2) {
             for (int k = 0; k < rgb_width; k += 2) {
-                rgb_pos = rgb_pos + 2;
-                yuv_pos = rgb_pos/2 + offset - 1;
+                rgb_pos += 2;
+                yuv_pos += 1;
 
                 int tempR = (int)std::lround(((int)R_data[rgb_pos] + (int)R_data[rgb_pos+1] + (int)R_data[rgb_pos + rgb_width] + (int)R_data[rgb_pos + rgb_width + 1]) / 4);
                 int tempG = (int)std::lround(((int)G_data[rgb_pos] + (int)G_data[rgb_pos+1] + (int)G_data[rgb_pos + rgb_width] + (int)G_data[rgb_pos + rgb_width + 1]) / 4);
@@ -129,12 +132,12 @@ void YUVI420::addRGB(std::vector <unsigned char> R_data, std::vector <unsigned c
                 yuv_V_data[yuv_pos] = (unsigned char) temp;
             }
 
-            rgb_pos = rgb_pos + rgb_width;
-            offset = offset + (yuv_width - rgb_width);
+            rgb_pos = j*rgb_width;
+            yuv_pos = j * yuv_width/4;
         }
 
         rgb_pos = 0;
-        offset = i * yuv_U_frame_size;
+        yuv_pos = i * yuv_U_frame_size;
     }
 }
 
